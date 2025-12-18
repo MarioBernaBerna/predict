@@ -4,7 +4,7 @@ const { pathToFileURL } = require("url");
 const tf = require("@tensorflow/tfjs");
 const wasmBackend = require("@tensorflow/tfjs-backend-wasm");
 
-const MODEL_VERSION = "v1.0";
+const MODEL_VERSION = process.env.MODEL_VERSION || "v1.0";
 
 let model = null;
 let ready = false;
@@ -109,7 +109,7 @@ async function predict(features) {
     : await out.array();
 
   const predictionReal = preds2d?.[0]?.[0] ?? 0;
-  const prediction = Math.max(predictionReal, 0); // clamp a 0
+  const prediction = Math.clamp(predictionReal) //Math.max(predictionReal, 0); // clamp a 0
 
   if (Array.isArray(out)) out.forEach(t => t?.dispose?.());
   else out?.dispose?.();
