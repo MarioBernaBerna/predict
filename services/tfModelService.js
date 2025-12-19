@@ -109,7 +109,7 @@ async function predict(features) {
     : await out.array();
 
   const predictionReal = preds2d?.[0]?.[0] ?? 0;
-  const prediction = Math.clamp(predictionReal) //Math.max(predictionReal, 0); // clamp a 0
+  const prediction = Math.abs(predictionReal) //Math.clamp(predictionReal, 0); // clamp a 0
 
   if (Array.isArray(out)) out.forEach(t => t?.dispose?.());
   else out?.dispose?.();
